@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import Jeremy from "./jeremy.mdx";
+import Jeremy from "./Jeremy.mdx";
 import "./jeremy.css";
 
 export const Route = createFileRoute("/blog/jeremy/")({
