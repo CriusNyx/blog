@@ -1,0 +1,100 @@
+# Doing Cool Things (with Markdown 2)
+
+In part one I engineered a solution to enable component embedding to markdown documents. However, 
+there are still some features I found myself wanting from my original solution. First, I couldn't
+customize metadata about the document such as what title string to display, and customizing 
+[slugs](## "A slug is a unique shorthand to identify a resource in a computer system. Slugs are used in my note software for link shorthands.") 
+for the document.
+
+## Directives
+
+Directives are a feature in computer programming languages that customize the behavior of the source
+code before it's fed into a compiler. For example, in C# directives can be used to conditionally 
+compile code.
+
+For example, consider this example that adds additional GUI elements in the Unity Editor.
+
+```csharp
+using UntyEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
+class MyComponent: MonoBehavior {
+  void OnSceneGUI(){
+    #if UNITY_EDITOR
+    // This code will only work in the editor.
+    // We can use directives to include it only in the editor.
+    EditorGuiLayout.ColorField();
+    #endif
+  }
+}
+```
+
+Directives are a convenient way to create a variety of different output documents from a single 
+source code file.
+
+We can use directives in markdown to implement some of the following features.
+
+- Customize what sections of the document are public, and what are private.
+- Customize the title of the document, and other meta data.
+- Enable or disable feature flags for particular features.
+- Embed other markdown documents
+
+### Syntax
+
+To enable directives in markdown the first thing I needed to do was find a syntax for declaring one
+that doesn't already have a special meaning in markdown. I used the @ symbol.
+
+For example, this document on my notetaking app customizes it's title using the `@title` directive.
+
+<Row>
+  <Col>
+  ```markdown
+  @title "This is my title"
+
+  Here is my doc text.
+  ```
+  </Col>
+  <Col>
+    ![title](/blog/doingCoolThingsWithMarkdown2/title.png)
+  </Col>
+</Row>
+
+I can also customize the visibility of elements in the document using the `@dm` and `@player` 
+directives.
+
+```markdown
+@title "Market"
+
+The market is located on the south side of town.
+
+@dm
+
+## DMNotes
+
+When the players approach the market for the first time there is a crowd outside looking for a 
+scammer who can no longer be found at the market.
+
+@player
+
+## Shop Items
+
+The shop has the following items.
+```
+
+We can see what it looks like in the finished page below.
+
+<Row>
+  <Col>
+  ### For DM
+
+  ![dm](/blog/doingCoolThingsWithMarkdown2/market-dm.png)
+  </Col>
+  <Col>
+  ### For Players
+  ![dm](/blog/doingCoolThingsWithMarkdown2/market-player.png)
+  </Col>  
+</Row>
+
+## Embedding Docs

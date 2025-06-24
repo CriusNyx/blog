@@ -1,0 +1,128 @@
+@import "tailwindcss";
+
+html {
+  --dark-red: #780000;
+  --light-red: #c1121f;
+  --tan: #fdf0d5;
+  --dark-blue: #003049;
+  --light-blue: #669bbc;
+  --primary: var(--dark-red);
+  --secondary: var(--dark-blue);
+  --tertiary: #669bbc;
+  --accent: #fdf0d5;
+  --error: #c1121f;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+body {
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(to bottom right, white, var(--dark-red)),
+    linear-gradient(to bottom left, white, var(--dark-blue)),
+    linear-gradient(black, white);
+  background-blend-mode: multiply;
+
+  overflow: auto;
+  scrollbar-gutter: stable;
+
+  font-family: "Quicksand", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+}
+
+h1 {
+  align-self: center;
+  font-size: 3rem;
+  font-weight: 400;
+}
+h2 {
+  font-size: 2.5rem;
+  font-weight: 400;
+}
+
+h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+h4,
+h5,
+h6 {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+
+  width: 100%;
+  height: 100%;
+}
+
+h1,
+h2,
+h3,
+h4,
+p {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+ul li {
+  list-style: disc;
+  margin-left: 2rem;
+}
+
+pre {
+  background-color: var(--secondary);
+  padding: calc(var(--spacing) * 5);
+}

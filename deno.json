@@ -1,0 +1,42 @@
+{
+  "tasks": {
+    "dev": "deno run -A --node-modules-dir npm:vite",
+    "build": "deno run -A --node-modules-dir npm:vite build",
+    "preview": "deno run -A --node-modules-dir npm:vite preview",
+    "serve": "deno run --allow-net --allow-read jsr:@std/http@1/file-server dist/"
+  },
+  "compilerOptions": {
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+    "jsxImportSourceTypes": "@types/react"
+  },
+  "imports": {
+    "@deno/vite-plugin": "npm:@deno/vite-plugin@^1.0.4",
+    "@mdx-js/react": "npm:@mdx-js/react@^3.1.0",
+    "@mdx-js/rollup": "npm:@mdx-js/rollup@^3.1.0",
+    "@shikijs/rehype": "npm:@shikijs/rehype@^3.6.0",
+    "@tailwindcss/vite": "npm:@tailwindcss/vite@^4.1.10",
+    "@tanstack/react-router": "npm:@tanstack/react-router@^1.121.12",
+    "@tanstack/react-router-devtools": "npm:@tanstack/react-router-devtools@^1.121.12",
+    "@tanstack/router-plugin": "npm:@tanstack/router-plugin@^1.121.12",
+    "@types/react": "npm:@types/react@^19.0.10",
+    "@types/react-dom": "npm:@types/react-dom@^19.0.4",
+    "@vitejs/plugin-react": "npm:@vitejs/plugin-react@^4.3.4",
+    "prismjs": "npm:prismjs@^1.30.0",
+    "react": "npm:react@^19.0.0",
+    "react-dom": "npm:react-dom@^19.0.0",
+    "react-markdown": "npm:react-markdown@^10.1.0",
+    "rehype": "npm:rehype@^13.0.2",
+    "rehype-prism-plus": "npm:rehype-prism-plus@^2.0.1",
+    "rehype-starry-night": "npm:rehype-starry-night@^2.2.0",
+    "rehype-stringify": "npm:rehype-stringify@^10.0.1",
+    "remark-gfm": "npm:remark-gfm@^4.0.1",
+    "remark-parse": "npm:remark-parse@^11.0.0",
+    "remark-rehype": "npm:remark-rehype@^11.1.2",
+    "tailwindcss": "npm:tailwindcss@^4.1.10",
+    "unified": "npm:unified@^11.0.5",
+    "vite": "npm:vite@^6.1.1",
+    "vite-plugin-prismjs": "npm:vite-plugin-prismjs@^0.0.11"
+  }
+}

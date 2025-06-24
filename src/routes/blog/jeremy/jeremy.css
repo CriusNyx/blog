@@ -1,0 +1,21 @@
+.jeremy h1 {
+  align-self: center;
+}
+
+.jeremy h2 {
+  font-size: 2rem;
+}
+
+.jeremy h3 {
+  align-self: center;
+  font-size: 1rem;
+}
+
+.dialog p {
+  align-self: center;
+  width: 40rem;
+}
+
+em {
+  color: var(--color-gray-400);
+}

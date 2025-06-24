@@ -1,0 +1,219 @@
+import { MyCustomComponent } from './-MyCustomComponent.tsx';
+
+# Doing Cool Things (with Markdown)
+
+I'm a big fan of markdown. I think it's a really great syntax for making content for the web.
+This blog is created using MDX, a flavor of markdown that supports embedding components.
+
+I have a website for DnD notes, and I wanted to use something like MDX for that website. However,
+when I looked into integrated MDX itself, it had a couple of implementation shortcomings that 
+made it not suited for purpose. First, it's quite labor-some to pass in huge quantities of props.
+I also wanted to be able to embed other markdown documents, which MDX can do, but MDX tends to 
+provide so much power for embedding that it's easy to create embed loops, which would crash the
+clients computer without special handling code. Finally, I want to add blocks to the Markdown that 
+control permissions for the content, which isn't a feature of MDX.
+
+I've made a few attempts at creating a system for addressing these things, and I'm going to present
+a few of them here.
+
+## Embedding Components
+
+### First Approach
+
+The first attempt I made to deal with embedded component was by targeting the link component in the
+markdown doc. The solution looked something like this.
+
+```md
+# This is a doc
+
+This is a paragraph with a [link]('/link');
+```
+
+Then in the document this link will be transformed into a custom link component doing something like
+this.
+
+```tsx
+import ReactMarkdown from "react-markdown";
+
+interface MarkdownProps {
+  code: string;
+}
+
+function Markdown(props: MarkdownProps) {
+  return (
+    <ReactMarkdown components={{ a: CustomAComponent }}>
+      {props.code}
+    </ReactMarkdown>
+  );
+}
+```
+
+#### Shortcomings of this approach
+
+This first approach had a lot of downsides. First, the only information I could embed in the 
+link was it's location. And I considered targeting the link to a JSON file, but that solution just
+didn't really satisfy me. It required that I do this additional work of creating and hosting all 
+these additional files, and I had this system that I could use to edit he markdown on my site, but 
+extending that solution to also include JSON files just didn't feel like the right solution.
+
+### Better Approach
+
+After sitting on the problem a little longer, I ran into a different issue that I wanted to solve 
+with markdown. I had a lot of notes for Satisfactory, and I wanted a way to embed the output of a 
+computer program in those notes. So I created a program called Runmark to do that. And here we see
+the first insight I needed for my website.
+
+````md
+
+The c# is for the language server to know what language to render.
+The cSharp directive at the end is actually the name of a Runmark plugin that parses and executes
+the cSharp code using the Roslyn compiler and .NET runtime.
+
+```c# cSharp
+using System;
+
+Console.WriteLine("Hello World!");
+```
+
+```output c# cSharp
+Hello World!
+```
+
+````
+
+There were two breakthrough ideas for Runmark that were improvements over my previous solution. 
+First, that directions could be encoded after the language identifier for the code block, and the 
+second was that the code block itself could be used to encode data. If I used the data in the 
+code block header to encode a component to render, and the body of the code block to encode 
+component props as JSON then I can use that to embed components in my markdown documents.
+
+A solution implementing these breakthroughs might look like the following.
+
+<Row>
+  <Col>
+  ````md
+  Here is our markdown.
+
+  ```json MyCustomComponent
+  {
+    "name": "My Component Name",
+    "text": "My Component Text"
+  }
+  ```
+
+  ````
+  </Col>
+  <Col>
+    <Frame title='Output'>
+      Here is our markdown.
+
+      <MyCustomComponent name='My Component Name' text='My Component Text'/>
+    </Frame>
+  </Col>
+</Row> 
+
+This gives us a skeleton that we can use to engineer a full solution.
+
+## Engineering a JSON based solution
+
+### Custom pre and code tags
+
+The first hurdle to overcome is to engineer a custom code component that can handle this issue.
+However, markdown always puts code components inside of pre components. And we don't want our
+embedded components to be inside a pre, so we also need to make a custom pre component that will 
+omit the child code component if it should be embedded.
+
+```tsx
+function Markdown(props) {
+  return (
+    <ReactMarkdown
+      components={{
+        pre(props) {
+          // Here we just omit all pre components from the document because they interfere with
+          // embedded component rendering.
+          // The component injector will add the pre tag if it's necessary.
+          return props.children;
+        },
+        code(codeProps) {
+          return (
+            <ComponentInjector
+              // We have to explicity cast the codeProps because some of their data is hidden by
+              // React Markdown, and we need to access that hidden data.
+              {...(codeProps as any)}
+              componentMap={props.componentMap}
+            />
+          );
+        },
+        // Additional HTML components that the app might want to customize.
+        ...props.components,
+      }}
+    >
+      {props.markdownBody}
+    </ReactMarkdown>
+  );
+}
+
+```
+
+### The Component Injector
+
+Then we can inject components by reading the properties parsed from markdown.
+
+```tsx
+export function ComponentInjector(props: ComponentInjectorProps) {
+  // Meta is the part of the code block after the json
+  // In this case it has our component name
+  const componentName = props?.node?.data?.meta;
+
+  // If the component exists inside the component map, we grab it.
+  if (componentName in props.componentMap) {
+    try {
+      const Component = props.componentMap[componentName];
+
+      // Then we parse the props out of the component.
+      const componentProps = JSON.parse(props.children);
+
+      // Finally we render that component with those props.
+      return <Component {...componentProps} />;
+    } catch {
+      return <Error>Failed to render component</Error>;
+    }
+  } else {
+    // If we can't find the component then we return a regular old code block instead.
+    // We need to append the pre tags because they were stripped earlier.
+    return (
+      <pre>
+        <code {...props} />
+      </pre>
+    );
+  }
+}
+```
+
+#### Examples
+
+Here's a stat block for a Zombie taken from the SRD using my custom Autostat component.
+
+<Row>
+  <Col>
+    ![stats](/blog/doingCoolThingsWithMarkdown/stats.png)
+  </Col>
+  <Col>
+    ![zombie](/blog/doingCoolThingsWithMarkdown/zombie.png)
+  </Col>
+</Row>
+
+## Improvements
+
+There are two simple improvements I made to the solution above.
+
+First, I used zod to validate all 
+component props before rendering the component. If the zod schema fails to parse then I can display
+an error instead.
+
+Second, I also added support for yaml in addition to JSON. Hand writing JSON is annoying.
+
+## Part 2
+
+After the work I did on embedding components I added some other really cool features. You can read 
+about it [here](./doingCoolThingsWithMarkdown2)

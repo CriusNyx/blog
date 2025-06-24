@@ -1,0 +1,427 @@
+# Themes and Styles
+
+## Motivation
+
+For my app I needed a system that could do the following things.
+
+- Set the color pallet for the application.
+- Set fonts, and other visual elements.
+- Provide an API for changing the theme.
+- Dependency inject custom styles into the application.
+- Be easily accessible and adjustable.
+
+## Theme
+
+The theme provider address the need of colors and fonts, but not specific styles. In the past I 
+preferred to deal with everything using dependency injection of styles. However, it requires you 
+write a lot of boiler plate for every single component, and that's annoying, so I've created a
+system for my newest application that uses css variables instead.
+
+After a couple iterations, this is what I typically use for my app themes.
+
+```tsx
+interface Pallet {
+  // This is usually the background color for panels.
+  primary: ColorValue;
+  // This is usually the color for things like nested panels, and context menus.
+  secondary: ColorValue;
+  // Additional color for when the developer needs something that's not the primary and secondary.
+  // In practice it rarely gets used.
+  tertiary: ColorValue;
+  // Color for elements that should stick out, like buttons.
+  accent: ColorValue;
+  // Color of error values.
+  error: ColorValue;
+}
+
+interface Theme {
+  pallet: Pallet
+  // Fonts for UI elements
+  uiFont: string;
+  uiTitleFont: string;
+  // Fonts for text.
+  font: string;
+  titleFont: string;
+}
+```
+
+### CSS Variables
+
+Next I set up some css variables for these values. I've used the values for this blog here.
+
+```css
+html {
+  --primary: #780000;
+  --secondary: #003049;
+  --tertiary: #669bbc;
+  --accent: #fdf0d5;
+  --error: #c1121f;
+
+  --font: "Quicksand", sans-serif;
+  --title-font: "Quicksand", sans-serif;
+  --ui-font: "Quicksand", sans-serif;
+  --ui-title-font: "Quicksand", sans-serif;
+}
+```
+
+### Creating the Theme Provider
+
+Next it's time to set up a context, provider, and hooks.
+
+The context is going to host our theme so we can access it elsewhere in the application. However,
+the most important thing the context does it set the CSS variables whenever the theme changes.
+
+```tsx
+interface ThemeContext {
+  theme: Theme;
+}
+
+const themeContext = createContext<ThemeContext>({ theme: defaultAppTheme });
+
+interface ThemeProviderProps{
+  theme: Theme;
+}
+
+export function ThemeProvider(props: ThemeProviderProps){
+
+  // TODO: Add hooks to set CSS vars.
+
+  return (
+    <themeContext.Provider value={{theme: props.theme}}>
+      {props.children}
+    </themeContext.Provider>
+  );
+}
+
+export function useTheme(){
+  return useContext(themeContext).theme;
+}
+```
+
+### Utility Classes
+
+Then it's time to make some utility CSS classes. These classes let us easily assign colors to 
+element backgrounds and text. The class names are inspired by tailwind.
+
+```css
+/* Utility classes for backgrounds */
+bg-p {
+  background-color: var(--primary);
+}
+
+bg-s {
+  background-color: var(--secondary);
+}
+
+bg-t {
+  background-color: var(--tertiary);
+}
+
+bg-a {
+  background-color: var(--accent);
+}
+
+bg-e {
+  background-color: var(--error);
+}
+
+/* Utility classes for text color */
+
+text-p {
+  color: var(--primary);
+}
+
+text-s {
+  color: var(--secondary);
+}
+
+text-t {
+  color: var(--tertiary);
+}
+
+text-a {
+  color: var(--accent);
+}
+
+text-e {
+  color: var(--error);
+}
+```
+
+Then we can use these classes like this.
+
+```tsx
+function Panel(props: PropsWithChildren){
+  return <div className='bg-p'>{props.children}</div>;
+}
+```
+
+Let's also add some classes to control fonts.
+
+```css
+.ui h1,
+.ui h2,
+.ui h3,
+.ui h4,
+.ui h5,
+.ui h6 {
+  font-family: var(--ui-title-font);
+}
+
+.ui p {
+  font-family: var(--ui-font);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--title-font);
+}
+
+p {
+  font-family: var(--font);
+}
+
+```
+
+### Finally
+
+Add hooks to assigns css vars.
+
+```tsx
+/** Set a CSS Variable to the specified value. */
+function useCSSVar(varName: string, value: string) {
+  useEffect(() => {
+    document.documentElement.style.setProperty(varName, value);
+    return () => {
+      // Do cleanup if it matters.
+    }
+  }, [value]);
+}
+
+export function ThemeProvider(props: ThemeProviderProps){
+
+  useCSSVar("--primary", props.theme.primary);
+  useCSSVar("--secondary", props.theme.secondary);
+  useCSSVar("--tertiary", props.theme.tertiary);
+  useCSSVar("--accent", props.theme.accent);
+  useCSSVar("--error", props.theme.error);
+
+  return (
+    <themeContext.Provider value={{theme: props.theme}}>
+      {props.children}
+    </themeContext.Provider>
+  );
+}
+```
+
+## Styles
+
+In most apps today I prefer to use tailwind for styles, rather then using dependency injection based 
+solutions. Tailwind is not particularly compatible with that style of using dependency injection to 
+inject styles. However, sometimes I still find it necessary to do this for app, and this is an 
+outline of the system I used to manage that.
+
+This system also works better for React Native then React for the web. On the web CSS just
+kind of resolves this problem. But in React Native, where all styles are passed as object literals
+this system is quite useful.
+
+The idea is to create a system that does something like the following.
+
+```tsx
+import { createStyles } from '../styles/index.tsx';
+
+// styles provides whatever style information is associated with this particular app.
+function myComponentStyles(styles: AppStyles) {
+  // createStyles is just a helper function to add type inference.
+  return createStyles({
+    container: {
+      display: 'flex',
+      flexDirection: 'column',
+      padding: styles.padding.md,
+    },
+    text: 'text-class',
+  });
+}
+
+export type MyComponentStyles = ReturnType<myComponentStyles>;
+
+export function MyComponent(){
+  // The use styles hook will resolve the styles for this component.
+  // The 'MyComponent' is a key for any dependency injected styles for the component.
+  const styles = useStyles(myComponentStyles, 'MyComponent');
+
+  return (
+    <div style={styles.container}>
+      <p className={styles.text}>Some Text</p>
+    </div>
+  );
+}
+```
+
+I find it's really helpful to think about the interface for something before actually developing 
+that thing. That's what the function of the code above is for.
+
+### Creating the Context and Hook
+
+First, let's implement our `createStyles` helper function.
+
+```tsx
+type StylesOutput<T extends object> = {
+  [key in keyof T]: T[key] extends string ? string : React.CSSProperties;
+};
+
+/** Pass in an object literal to get an style with automatic type inference. */
+function createStyles<T extends Record<string, React.CSSProperties | string>>(
+  value: T
+): StylesOutput<T> {
+  return value as StylesOutput<T>;
+}
+
+```
+
+Most of the work for this dependency injection system comes from the useStyles hook. Let's have a 
+look at it.
+
+```tsx
+// This can contain anything. It's going to be the basis for dependency injecting styles.
+// I would likely define this with a zod schema these days.
+const commonStyles = {
+  padding: {
+    sm: 5,
+    md: 10,
+    lg: 20,
+  },
+};
+
+export type AppStyles = typeof commonStyles;
+
+// We will convert this into a more narrow type later.
+type InjectedStylesMap = {
+  [key: string]: (styles: AppStyles) => object;
+};
+
+interface StylesContextType {
+  // We'll provide a type for this later.
+  injectedStyles: InjectedStylesMap;
+  baseStyles?: Partial<AppStyles>;
+}
+
+const StylesContext = createContext<StylesContextType>({
+  injectedStyles: {},
+  baseStyles: commonStyles,
+});
+
+export function useStyles<T extends object>(factory: (styles: AppStyles) => StylesOutput<T>, name: string){
+  const context = useContext(StylesContext);
+
+  if(name in context.injectedStyles){
+    // If a style has been injected, use that instead.
+    return context.injectedStyles[name](context.baseStyles);
+  }
+
+  // Otherwise use the factory provided by the component.
+  return factory(context.baseStyles);
+}
+
+```
+
+### Creating a Styles Provider
+
+
+We need to make a provider that hosts our context for our hook.
+
+```tsx
+// I like lodash. :3
+// I'm happy that I'm not delivering bleeding edge software that uses underscore.
+// Also, I'm happy for tree shaking.
+import _ from 'lodash';
+
+interface StylesProviderProps extends PropsWithChildren {
+  injectedStyles: InjectedStylesMap;
+  baseStyles?: Partial<AppStyles>;
+}
+
+export function StylesProvider(props: StylesProviderProps) {
+  const baseStyles = useMemo(
+    () => _.merge(props.baseStyles, commonStyles),
+    [props.baseStyles]
+  );
+
+  return (
+    <StylesContext.Provider
+      value={{ injectedStyles: props.injectedStyles, baseStyles }}
+    >
+      {props.children}
+    </StylesContext.Provider>
+  );
+}
+```
+
+### Injecting styles
+
+Memorizing the names of components to inject styles into is annoying. Especially if you need to 
+inject styles for a particular component for multiple different app skins. Let's fix that.
+
+Let's update the type of the `InjectedStylesMap` to get better type safety.
+
+```tsx
+export type StylesFactory<T extends StylesOutput<any>> = (styles: AppStyles) => T;
+export interface InjectedStylesMap {
+  Button: StylesFactory<ButtonStyles>;
+}
+```
+
+Then, lets update our button class to export a useful version of it's styles.
+
+```tsx
+function buttonStyles(styles: AppStyles){
+  return createStyles({
+    container: { /* Unskinned styles go here. */ }
+  });
+}
+
+export type ButtonStyles = ReturnType<typeof buttonStyles>;
+```
+
+Now we can inject custom styles for our button.
+
+```tsx
+const appSkin: InjectedStylesMap = {
+  Button: (styles: AppStyles) => ({
+    /* Skinned Styles goes here. */
+  }),
+};
+
+const appBaseStyles: AppStyles = {
+  // Base styles for the app go here.
+};
+
+function App() {
+  return (
+    <StylesProvider injectedStyles={appSkin} baseStyles={appBaseStyles}>
+      <AppRouter />
+    </StylesProvider>
+  );
+}
+
+```
+
+Or ideally, we resolve the skin using a hook so that it's easier to configure.
+
+```tsx
+function App(props: AppProps) {
+  
+  // We can implement useAppSkin somewhere to resolve the styles.
+  const { skin, baseStyles } = useAppSkin(props.appVariant);
+
+  return (
+    <StylesProvider injectedStyles={skin} baseStyles={baseStyles}>
+      <AppRouter />
+    </StylesProvider>
+  );
+}
+```
