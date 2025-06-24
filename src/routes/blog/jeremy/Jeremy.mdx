@@ -1,27 +1,27 @@
 
 export function Therapist(props) {
   return (
-    <>
-      <h3 class='text-red-500'>Therapist</h3>
+    <div class='flex flex-col text-red-200'>
+      <h3 class='text-red-400'>Therapist</h3>
       {props.children}
-    </>);
+    </div>);
 }
 
 export function Ron(props) {
   return (
-    <>
-      <h3 class='text-blue-500'>Ron</h3>
+    <div class='flex flex-col text-blue-200'>
+      <h3 class='text-blue-400'>Ron</h3>
       {props.children}
-    </>);
+    </div>);
 }
 
 
 export function Mick(props) {
   return (
-    <>
-      <h3 class='text-green-500'>Mick</h3>
+    <div class='flex flex-col text-green-200'>
+      <h3 class='text-green-400'>Mick</h3>
       {props.children}
-    </>);
+    </div>);
 }
 
 export function Dialog(props) {
@@ -37,37 +37,37 @@ from each other.
 
 <Dialog>
 
-  <Therapist/>
+  <Therapist>
+    What brings the two of you in for counseling?
+  </Therapist>
 
-  What brings the two of you in for counseling?
+  <Mick>
+    He fucked Jeremy.
+  </Mick>
 
-  <Mick/>
+  <Ron>
+    He fucked Jeremy.
+  </Ron>
 
-  He fucked Jeremy.
+  <Mick>
+    How ... Rude!
+  </Mick>
 
-  <Ron/>
-    
-  He fucked Jeremy.
+  <Ron>
+    All I'm saying is he tastes better.
+  </Ron>
 
-  <Mick/>
+  <Mick>
+    *to therapist* He does, he's on that keto diet.
+  </Mick>
 
-  How ... Rude!
-
-  <Ron/>
-
-  All I'm saying is he tastes better.
-
-  <Mick/>
-
-  *to therapist* He does, he's on that keto diet.
-
-  <Ron/>
-
+  <Ron>
   Maybe if you ate less garlic.
+  </Ron>
 
-  <Mick/>
-  
-  Bitch, you know you love it.
+  <Mick>  
+    Bitch, you know you love it.
+  </Mick>
 
 </Dialog>
 
@@ -75,49 +75,49 @@ A long pause follows. The therapist takes some notes, and then breaks the silenc
 
 <Dialog>
 
-  <Therapist/>
+  <Therapist>
+    Is Jeremy a friend of yours?
+  </Therapist>
 
-  Is Jeremy a friend of yours?
+  <Mick>
+    A friend of his maybe.
+  </Mick>
 
-  <Mick/>
+  <Ron>
+    Girl, you were bowling with that man yesterday.
+  </Ron>
 
-  A friend of his maybe.
+  <Mick>  
+    You know, you could be bowling me put in the effort.
+  </Mick>
 
-  <Ron/>
+  <Ron>
+    You're just don't like my new scent.
+  </Ron>
 
-  Girl, you were bowling with that man yesterday.
+  <Mick>
+    You're right. That's why I threw it out this morning.
+  </Mick>
 
-  <Mick/>
-  
-  You know, you could be bowling me put in the effort.
+  <Ron>
+    You did what!?!?
+  </Ron>
 
-  <Ron/>
+  <Mick>
+    Mmm hmm!
+  </Mick>
 
-  You're just don't like my new scent.
+  <Ron>
+    You better watch out for your records bitch, cause you just about unlocked something.
+  </Ron>
 
-  <Mick/>
+  <Mick>
+    You wouldn't.
+  </Mick>
 
-  You're right. That's why I threw it out this morning.
-
-  <Ron/>
-
-  You did what!?!?
-
-  <Mick/>
-
-  Mmm hmm!
-
-  <Ron/>
-
-  You better watch out for your records bitch, cause you just about unlocked something.
-
-  <Mick/>
-
-  You wouldn't.
-
-  <Ron/>
-
-  Actually, I did already.
+  <Ron>
+    Actually, I did already.
+  </Ron>
 
 </Dialog>
 
@@ -125,41 +125,41 @@ Ron pulls out his phone to show a pic of a smashed record. Mick looks at Ron app
 
 <Dialog>
 
-  <Mick/>
+  <Mick>
+    You know why you're perfume is in the garbage? So it can smell like you.
+  </Mick>
 
-  You know why you're perfume is in the garbage? So it can smell like you.
+  <Ron>
+    Well in that case your toothbrush can go in the garbage. Who knows where your mouth has been.
+  </Ron>
 
-  <Ron/>
+  <Mick>
+    You know, cause it's been on your man stick.
+  </Mick>
 
-  Well in that case your toothbrush can go in the garbage. Who knows where your mouth has been.
+  <Ron>
+    And Jeremy.
+  </Ron>
 
-  <Mick/>
+  <Mick>
+    Like you don't like that.
+  </Mick>
 
-  You know, cause it's been on your man stick.
+  <Ron>
+    Bitch, don't make me stonewall you.
+  </Ron>
 
-  <Ron/>
+  <Mick>
+    You don't have the balls.
+  </Mick>
 
-  And Jeremy.
+  <Ron>
+    Yeah, cause you like to hang on to them.
+  </Ron>
 
-  <Mick/>
-
-  Like you don't like that.
-
-  <Ron/>
-
-  Bitch, don't make me stonewall you.
-
-  <Mick/>
-
-  You don't have the balls.
-
-  <Ron/>
-
-  Yeah, cause you like to hang on to them.
-
-  <Mick/>
-
-  Bitch!
+  <Mick>
+    Bitch!
+  </Mick>
 
 </Dialog>
 
@@ -167,91 +167,90 @@ Mick starts climbing onto run, and pulls loose his toupée. They're both shoutin
 at each other and shouting. The therapist attempts to break up the fight.
 
 <Dialog>
+  <Therapist>
+    Hey... can we... guys... guys...
+    
+    **BOYS!!!** Break it up. I'm not a social worker.
 
-  <Therapist/>
+    ...
 
-  Hey... can we... guys... guys...
-  
-  **BOYS!!!** Break it up. I'm not a social worker.
+    Look. If we're gonna work this out, we're going to have to talk about our feelings. Okay... So 
+    why don't I ask a few questions, and we can work out what everyone is feeling here.
 
-  ...
+    So. Who wants to go first.
 
-  Look. If we're gonna work this out, we're going to have to talk about our feelings. Okay... So 
-  why don't I ask a few questions, and we can work out what everyone is feeling here.
+    ...
 
-  So. Who wants to go first.
+    ...
 
-  ...
+    Alright. Ron? Why don't you tell me how you're feeling right now.
+  </Therapist>
 
-  ...
+  <Ron>
+    I don't know. Why don't you ask Jeremy.
+  </Ron>
 
-  Alright. Ron? Why don't you tell me how you're feeling right now.
+  <Therapist>
+    Jeremy isn't here, and I'm asking you.
+  </Therapist>
 
-  <Ron/>
+  <Ron>
+    Hurt I guess. It's like... it's hard to understand even why he's upset. Like... I thought he liked
+    Jeremy. I thought he would be happy for me. But like... I'm confused.
+  </Ron>
 
-  I don't know. Why don't you ask Jeremy.
+  <Therapist>
+    Why don't you ask him how he might feel?
+  </Therapist>
 
-  <Therapist/>
+  <Ron>
+    Bitch!? How you feelin?
+  </Ron>
 
-  Jeremy isn't here, and I'm asking you.
+  <Mick>
+    Kinda hungry. Can we get a burger after this?
+  </Mick>
 
-  <Ron/>
+  <Therapist>
+    Okay... Can we try again. But with a little sincerity.
+  </Therapist>
 
-  Hurt I guess. It's like... it's hard to understand even why he's upset. Like... I thought he liked
-  Jeremy. I thought he would be happy for me. But like... I'm confused.
+  <Ron>
+    Fine. Mick. Why can't you be happy for Jeremy and me?
+  </Ron>
 
-  <Therapist/>
+  <Mick>
+    He probably fucks you better.
+  </Mick>
 
-  Why don't you ask him how he might feel?
+  <Ron>
+    He doesn't fuck you good.
+  </Ron>
 
-  <Ron/>
+  <Mick>
+    Fuck, I wish. He's got that machine with that special attachment, and he won't let me try it. It's
+    not for me, he says. It must be for you.
+  </Mick>
 
-  Bitch!? How you feelin?
+  <Ron>
+    Girl, I got a dildo for you on layaway.
+  </Ron>
 
-  <Mick/>
+  <Mick>
+    Wait? For real?
+  </Mick>
 
-  Kinda hungry. Can we get a burger after this?
+  <Ron>
+    Yeah. I ordered it for your birthday, but money was too tight.
+  </Ron>
 
-  <Therapist/>
+  <Mick>
+    Oh? So you did remember me birthday?
+  </Mick>
 
-  Okay... Can we try again. But with a little sincerity.
-
-  <Ron/>
-
-  Fine. Mick. Why can't you be happy for Jeremy and me?
-
-  <Mick/>
-
-  He probably fucks you better.
-
-  <Ron/>
-
-  He doesn't fuck you good.
-
-  <Mick/>
-
-  Fuck, I wish. He's got that machine with that special attachment, and he won't let me try it. It's
-  not for me, he says. It must be for you.
-
-  <Ron/>
-
-  Girl, I got a dildo for you on layaway.
-
-  <Mick/>
-
-  Wait? For real?
-
-  <Ron/>
-
-  Yeah. I ordered it for your birthday, but money was too tight.
-
-  <Mick/>
-
-  Oh? So you did remember me birthday?
-
-  <Ron/>
-
-  Of course I didn't. But I did really put a dildo on layaway. Here... Let me find the receipt.
+  <Ron>
+    Of course I didn't. But I did really put a dildo on layaway. Here... Let me find the receipt.
+  </Ron>
 
 </Dialog>
 
@@ -259,18 +258,18 @@ Ron pulls out his phone.
 
 <Dialog>
 
-  <Ron/>
+  <Ron>
+    See, look. It's got that screw attachment for the machine. And not a little screw. A big screw. 
+    For a big screw.
+  </Ron>
 
-  See, look. It's got that screw attachment for the machine. And not a little screw. A big screw. 
-  For a big screw.
+  <Mick>
+    Oh my gosh, it's even blue. You remembered to get a blue one.
+  </Mick>
 
-  <Mick/>
-
-  Oh my gosh, it's even blue. You remembered to get a blue one.
-
-  <Ron/>
-
-  Well of course. You think I'm gonna make my man fuck a plain old dildo.
+  <Ron>
+    Well of course. You think I'm gonna make my man fuck a plain old dildo.
+  </Ron>
 
 </Dialog>
 
@@ -278,13 +277,13 @@ The two start making out on the therapists couch.
 
 <Dialog>
 
-  <Ron/>
+  <Ron>
+    We should probably get going. Jeremy must be getting bored in the parking lot.
+  </Ron>
 
-  We should probably get going. Jeremy must be getting bored in the parking lot.
-
-  <Mick/>
-
-  Yeah. I think that's a good idea.
+  <Mick>
+    Yeah. I think that's a good idea.
+  </Mick>
 
 </Dialog>
 
