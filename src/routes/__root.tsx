@@ -13,7 +13,7 @@ export const Route = createRootRoute({
       </div>
       <hr />
       <div className="flex flex-col items-center grow">
-        <div className="flex flex-col my-5 p-5 w-250 max-w-[95vw] bg-[#00000050] grow rounded-xl">
+        <div className="flex flex-col w-250 max-w-[95vw] my-5 p-5 bg-[#00000050] grow rounded-xl">
           <Outlet />
         </div>
       </div>
