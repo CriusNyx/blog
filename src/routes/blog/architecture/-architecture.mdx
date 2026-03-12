@@ -1,0 +1,522 @@
+<Title writtenAt="03/11/2026">How I Make React Apps</Title>
+
+I like building apps. I build a lot of them. Don't look at the pile of
+unfinished apps. Wait no. Please. I'm begging you... They're not finished...
+**AHHHHHHH!**
+
+...
+
+...
+
+...
+
+Sorry. I blacked out. What happened?
+
+...
+
+Over the years I've picked up some tricks from... adding projects to the pile.
+This blog post is an attempt to explain things I learned to junior developers
+that might be doing something similar for the first time.
+
+To start, this is the stack I use most often for making React and React Native
+apps.
+
+If you're a new developer and you're having trouble getting these technologies
+to work together then just take your time and read the documentation carefully.
+Usually if something didn't work for me it's because I overlooked something when
+following the setup guides for these technologies.
+
+### My Stack
+
+#### [React](https://react.dev/)
+
+I use mostly vanilla react for most apps. I've heard a lot of good things about
+other flavors of react, especially Next.js, but I mostly just use vanilla React
+for two reasons.
+
+1. I don't like hosting servers.
+2. I'm typically building either highly interactive apps, or static pages.
+
+I always use vite's `ts-react` template and Deno for hosting.
+
+#### [MDX](https://mdxjs.com/)
+
+I love this technology. It plays nice with lots of frameworks, and being able to
+write markdown with HTML and components embedded is awesome.
+
+Additionally I get some of the features of MDX by embedding props in code blocks
+for other apps, or using specially encoded links. The advantage of this is
+better security\*. (I'm not a security expert. Please consult one.)
+
+#### [Vite](https://vite.dev/)
+
+Vite solves so many tooling headaches with react development. Vite plugins are
+awesome. I do not miss babel.
+
+#### [Deno](https://deno.com/)
+
+Deno is my favorite JS runtime. It can run typescript natively, without
+compiling, and in watch mode. It was also really easy to transition from node
+to deno. It usually works better then node, It's much faster, and it includes a
+really good default configuration for typescript. Hallelujah!
+
+But Deno's real killer feature is the ability to compile Javascript code to
+native apps. It makes it much easier to deploy apps to different platforms,
+like my raspberry pi.
+
+### Backend
+
+#### [Express](https://expressjs.com/)
+
+I don't think there's any strong competitor to Express for hosting JS backends.
+
+#### [Prisma](https://www.prisma.io/) + [TRPC](https://trpc.io/) + [Tanstack Query](https://tanstack.com/query)
+
+Shout out to Theo for making me aware of these. These three dependencies together
+are so awesome to work with. Not having to write a bunch of extra validation
+logic on your frontend is awesome.
+
+#### State management
+
+#### [Redux Toolkit](https://redux-toolkit.js.org/)
+
+Note! Redux toolkit should <span className='text-red-600'>**NEVER**</span> be
+used for your API requests!!! This is the way of state synchronization pain! Use
+Tanstack Query instead.
+
+React 19 has made huge improvements to the performance. Before then over rerendering
+in react apps was a nightmare. Redux makes that problems just disappear. It's a
+little challenging to learn, but once you get the hang of it it's a really
+awesome tool.
+
+Here's a few tips.
+
+First, make typesafe `useAppSelector` and `useAppDispatch` hooks. This makes
+intellisence play nicely with redux. Info on how to do this is in the typescript
+second of Redux's documentation.
+
+Second, use Lodash's `_.deepEquals` as your comparator in your `useSelector`
+call inside `useAppSelector`. Redux warns that it can cause performance issues
+to do this, but if you are never returning deeply nested data structures it
+should be fine.
+
+#### [Jotai](https://jotai.org/)
+
+There are a few different ways that I use Jotai.
+
+First, I like to use it to notify react when event handlers get called from non
+react libraries, like firebase.
+
+Second, I use to manage state in dependency packages. Redux does not play as
+nicely with local state as Jotai does, so it's really handy for this.
+
+Third, I use it to manage local state in really complicated components, like the
+DnD character component I created for making editable DnD character sheets.
+Jotai provides a Provider component that you can use to localize your Jotai
+store to a particular component.
+
+### Utility libraries
+
+#### [Lodash](https://www.npmjs.com/package/lodash)
+
+This is probably my favorite JS library. I install this in every project. Of
+course there's also underscore.js if you prefer that.
+
+#### [TS Results](https://www.npmjs.com/package/ts-results)
+
+This is a port of Rusts Result and Options types. It's not as nice to work with
+in javascript as in rust, but it's still better then throwing and catching exceptions.
+
+#### [Zod](https://www.npmjs.com/package/zod)
+
+Really awesome form validation library that actually solves a whole bunch of
+issues.
+
+You can use it to validate forms of course, but you can also use it to validate
+API requests. You can also use it to validate data before writing it to the
+database. You can use it to throw warnings if the schema of a third party API
+changes. You can use it to safely convert any's into nicely typed data. You can
+use it to populate missing fields in objects when you change something, like
+when you add a details field to some object type.
+
+If you have a project in Deno with a separate backend and frontend you can make
+shared directory with code that's common between the two, and put your zod
+schemas there. You can use Deno's import map feature to reference that code.
+
+#### [Immer](https://immerjs.github.io/immer/)
+
+Immer is the library that redux uses internally to work with immutable data
+structures. It's also a handy tool in other parts of your application, like
+sending state change notifications to clients, or adding an edit log to a
+database field.
+
+### Other bits and bobs
+
+#### [Tailwind](https://tailwindcss.com/)
+
+It takes just a few days to get used to and it's so much easier to use then
+handwriting CSS or component styles.
+
+#### WASM
+
+Language interoperability is insane today. LLVM can natively target WASM, and
+languages built on the LLVM toolchain can be used to create WASM modules. For
+example, C (using the Clang compiler) and Rust.
+
+C# can also be compiled to WASM by targeting `Microsoft.NET.Sdk.WebAssembly`
+instead of `Microsoft.NET.Sdk`. However it's quite challenging to find
+information about this in Microsoft's documentation.
+
+#### [Tauri](https://tauri.app/)
+
+Tauri is a platform for hosting web apps inside of desktop apps using whatever
+web view is the default for your system. I use it to create desktop versions
+of my web apps so users can use them without having to self host. The idea is
+the following.
+
+Create a frontend and backend using whatever stack is suited to the project.
+
+Develop it the way I would develop a normal webapp.
+
+Use Deno to compile the backend to a native application.
+
+Use Tauri to compile the frontend to a native application.
+
+Write a little but of rust to launch the Deno app as a subprocess and the Tauri
+app in a webview.
+
+From the users perspective it looks and feels like a native desktop app (albeit
+a little slower then a hand made native app). But allows me to deploy the same
+app to the cloud, or let my users deploy their own instances.
+
+### ARCHITECTURE!!!
+
+Okay. Let's build an app now. First, let's make a bunch of providers.
+
+```tsx
+// App
+function App() {
+  return (
+    <BackendProvider>
+      <Provider store={store}>
+        <ProviderProvider>
+          <FactoryBuilderBuilderProvider>
+            <Styles>
+              <MyCoolContext.Provider>
+                <AreYouEvenReadingThisProvider>
+                  {/* I am very deeply nested. */}
+                  <Navigation />
+                </AreYouEvenReadingThisProvider>
+              </MyCoolContext.Provider>
+            </Styles>
+          </FactoryBuilderBuilderProvider>
+        </ProviderProvider>
+      </Provider>
+    </BackendProvider>
+  );
+}
+```
+
+Whoa. Ugly. Also hard to read. Let's fix this.
+
+First, let's give these things some names to help our brain understand them.
+I'm going to call a component that provides functionality for my app a Service.
+The definition is intentionally really loose. Since react is a component based
+system, a Service can be represented as just a Component that renders nothing
+except it's children.
+
+```tsx
+// A service is really just a component with children.
+type Service = React.ComponentType<PropsWithChildren>;
+```
+
+Next, were going to create a Service Provider that can host all of the services.
+It's actually surprisingly simple. We'll just use reduce to convert an array of
+components to a single component. with it's contents all nested inside each
+other.
+
+```tsx
+interface ServiceProviderProps extends React.PropsWithChildren {
+  // Services to combine.
+  services: Service[];
+}
+
+export function ServiceProvider(props: ServiceProviderProps) {
+  // Here we convert the array of components to a single component.
+  return props.services.reduceRight(
+    // Nest the previously processed component inside the current one.
+    (prev, Curr) => <Curr>{prev}</Curr>,
+    // The children provided to the service provider are going to be the most
+    // Deeply nested component.
+    props.children,
+  );
+}
+```
+
+Then we can then refactor our app like this.
+
+```tsx
+// For components that need props we have to wrap
+// them in something that includes those props
+const StoreService: Service = ({ children }) => (
+  <Provider store={store}>{children}</Provider>
+);
+
+// Make an array of services
+// This is a lot easier to read.
+const services = [
+  BackendProvider,
+  StoreService,
+  ProviderProvider,
+  FactoryBuilderBuilderProvider,
+  Styles,
+  MyCoolContext.Provider,
+  AreYouEvenReadingThisProvider,
+];
+
+// App
+function App() {
+  // Return the app with the services all bundled together.
+  return (
+    <ServiceProvider services={services}>
+      <Navigation />
+    </ServiceProvider>
+  );
+}
+```
+
+If our app requires some kind of initialization we can use a memo to initialize
+the app.
+
+```tsx
+function initializeServices(config) {
+  // Do something
+  return [
+    /*services*/
+  ];
+}
+
+function App(config: AppConfig) {
+  const services = useMemo(() => initializeServices(config), [config]);
+
+  return (
+    <ServiceProvider services={services}>
+      <Navigation />
+    </ServiceProvider>
+  );
+}
+```
+
+We can also construct a service based on the config, or any other dependency
+like this.
+
+```tsx
+function createMyService(config: MyServiceConfig): Service {
+  return ({ children }) => (
+    <MyServiceHost {...myServiceConfig}>{children}</MyServiceHost>
+  );
+}
+
+function initializeServices(config: Config) {
+  return [
+    // Other services,
+    createMyService(config.myServiceConfig),
+  ];
+}
+```
+
+We can also use an async memo if we need to get something from the backend
+before we show content to the user.
+
+```tsx
+function App(config: AppConfig) {
+  // Wait for asynchronous initialization.
+  const { loading, value: services } = useAsyncMemo(
+    async () => await initializeServices(config),
+    [config],
+  );
+
+  // Return loading screen if the app is still loading.
+  if (loading) {
+    return <Loading />;
+  }
+
+  // Return service provider if the app has finished loading.
+  return (
+    <ServiceProvider services={services}>
+      <Navigation />
+    </ServiceProvider>
+  );
+}
+```
+
+### Making Services
+
+Most services in my app do one of the following.
+
+- Hosting a provider needed for some dependency
+  - Alternately providing initialization or configuration to a dependency.
+- Hosting data needed for other parts of the application, like the config.
+- Holding some state, and providing hooks to access or change it.
+
+Let's look at some examples.
+
+#### Hosting the config
+
+```tsx
+// Definition for the context state.
+interface ConfigContextState {
+  config: readonly Config;
+}
+
+// The context to provide the config.
+const configContext = createContext<ConfigContextState>({
+  config: undefined,
+} as ConfigContextState);
+
+// Hook that developer uses to access the config.
+export function useConfig() {
+  return useContext(configContext).config;
+}
+
+// This higher order function creates the service component.
+export function ConfigService(config: Config): Service {
+  // Return the props for the config.
+  return ({ children }: PropsWithChildren) => (
+    <configContext.Provider value={{ config }}>
+      {children}
+    </configContext.Provider>
+  );
+}
+```
+
+#### Initializing a dependency
+
+This service just exists to configure material UI on load.
+
+```tsx
+// This is imported from Material UI
+const appTheme = createTheme({
+  /* Theme goes here. */
+});
+
+export function MaterialUIService({ children }: PropsWithChildren) {
+  return <ThemeProvider theme={appTheme}>{children}</ThemeProvider>;
+}
+```
+
+#### Hosting a feature
+
+Sometimes in apps I'll let the user choose the color scheme they like. In that
+case I can implement that like this.
+
+```tsx
+// createEnum is further down in the article.
+export const Theme = createEnum("dust", "onyx", "forest");
+// This is 'dust' | 'onyx' | 'forest'
+export type Theme = EnumValues<typeof Theme>;
+
+// API exposed by the theme provider.
+interface MyThemeContextAPI {
+  /** The current app theme. */
+  currentTheme: Theme;
+  /** Change the current theme for the app. */
+  setTheme(newTheme: Theme): void;
+}
+
+// Create a context to host the API.
+const myThemeContext = createContext<MyThemeContextAPI>({
+  currentTheme: undefined,
+  setTheme() {
+    throw "No theme context provided";
+  },
+} as MyThemeContextAPI);
+
+// The actual themes the app supports.
+const AppThemes: Record<Theme, MUITheme> = {
+  dust: createTheme({/* Theme goes here */}),
+  onyx: createTheme({/* Theme goes here */}),
+  forest: createTheme({/* Theme goes here */}),
+};
+
+// The initial theme for the app.
+const defaultTheme = ThemeName.dust;
+
+export const MaterialUIService({children}: PropsWithChildren){
+  // Implementation of the theme provider.
+  const [currentTheme, setCurrentTheme] = useState(defaultTheme);
+
+  return (
+    <ThemeProvider theme={AppThemes[currentTheme]}>
+      <myThemeContext.Provider value={{currentTheme, setTheme: setCurrentTheme}}>
+        {children}
+      </myThemeContext.Provider>
+    </ThemeProvider>
+  );
+
+}
+
+// Here I create a hook that returns the context instead of exposing the
+// context. This is just to limit complexity. It also makes it easier for the
+// developer to find these hooks by type useApp and having intellisense list
+// the various app hooks.
+export function useAppTheme(){
+  return useContext(myThemeContext);
+}
+```
+
+### Utility Functions
+
+Some utility functions I sometimes use.
+
+#### createEnum
+
+The create enum function creates an enum with specified values.
+
+Typescript technically already has support for enums, but I find it unintuitive.
+I also don't like that typescript doesn't enforce type safety on enums well.
+
+So I created this.
+
+```ts
+/* Object that maps enum names to their values. */
+export type EnumType<T extends readonly string[]> = {
+  [K in T[number]]: K;
+};
+
+/* Extract values from the enum. */
+export type EnumValue<T extends EnumType<readonly string[]>> =
+  T extends EnumType<infer U> ? U[number] : never;
+
+/* Create an enum with the specified values. */
+export function createEnum<T extends readonly string[]>(...values: T) {
+  return values.reduce(
+    (prev, curr) => ({ ...prev, [curr]: curr }),
+    {},
+  ) as EnumType<T>;
+}
+```
+
+How do we use it?
+
+```ts
+const Theme = createEnum('dust', 'onyx', 'forest');
+type Theme = EnumValues<typeof Theme>;
+
+//This is the same as
+
+const Theme = {
+  dust: 'dust',
+  onyx: 'onyx',
+  forest: 'forest';
+} as const;
+type Theme = 'dust' | 'onyx' | 'forest';
+
+// You can get a list of themes with
+
+Object.keys(Theme);
+
+// You can also get a theme as a value with
+
+const currentTheme = Theme.dust;
+```

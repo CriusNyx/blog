@@ -1,0 +1,200 @@
+<Title writtenAt="03/11/2026">
+  <span className="flex flex-col items-baseline align-bottom">
+    <h1 className="pb-0! mb-0!">Projects That Failed!!!</h1>
+    <span className="text-xl text-gray-500 self-center leading-0">
+      (and some that didn't)
+    </span>
+  </span>
+</Title>
+
+I would say that I've written some software in my time. I've created a package
+or two. Are people using them? Not yet! They failed! Here are some projects I
+created, why I created them, why they failed (or didn't), and what I learned.
+
+## CS Serialization Experiments
+
+If you've worked with Unity before you know that it has some weird limitations.
+One big headache is serialization. Under the hood Unity uses primarily YAML to
+serialize and deserialize objects, and for the most part it's pretty good at it.
+Until you want to serialize something weird, like a generic class. Here's some
+things I got wrong, things I got write, and things I learned.
+
+The biggest lesson I learned from doing these kinds of experiments is not to try
+to fight the tooling that you're working with, even when it's not working
+exactly the way you might want. A lot of my experiments were based on saving and
+loading XML strings, and a lot of them worked, but they were not very flexible
+when it came to dealing with schema changes. I also made some experiments hand
+rolling binary serialization solutions.
+
+One experiment I made was for serializing objects in a raw binary file using
+free lists. This experiment could dynamically allocate and free memory, but it
+also required the CSharp developer to explicitically manage memory, which like...
+If you're doing memory management you're loosing one of the big advantages for
+working with C# in the first place.
+
+Another experiment that I created was Hermes Serializer (no relation to the JS
+compiler for React Native), a serializer that could serialize objects to a bit
+stream and send them over the network. It was designed to be very inflexible,
+expecting the server and client to agree ahead of time on exact definitions for
+data. The idea was you would autogenerate a unique serializer/deserializer for
+each type in your project for each release. Then versions of your netcode were
+only compatible with exactly the same version of your netcode. But it wasn't as
+reliable as I hoped.
+
+In retrospect, it would have been better to just use fat structs, or unity
+components to solve a lot of these problems, and when I'm working with these
+kinds of problems today that's how I solve them. For Hermes, Protobuffs are
+probably a better solution Sometimes you're just being too clever.
+
+## DnD Quest Log V1
+
+I created this first version of my DnD Quest Log program in ASP.NET. I picked
+this platform because I didn't want to learn Javascript. It wasn't all that
+great. Making quests required you to hand write HTML anyway, and my capacity to
+write CSS was basically not at all. It was a lot of work to write and maintain,
+I didn't know how to pay for hosting yet, and my players never used it anyway.
+This project was a dud all around, but I did get my first taste of writing web
+servers and server side rendering.
+
+## DnD Character Sheet V1
+
+This was one of the first projects I created with React. I abandoned the project
+eventually because it had crippling performance issues. I just didn't really
+understand what I was doing yet. It was also ugly. Really really ugly. This was
+the first thing I created using React, and honestly, I wasn't sold on it at the
+time. Function components and hooks weren't a thing yet, and you had to hand
+write a lot of the state management code.
+
+## First professional project
+
+This was created using React and C#. I can't talk a lot about this project, but
+this was my first taste of working on real software. In retrospect I don't think
+I was qualified to make this, but also I wasn't getting paid very well, so it's
+whatever. I'm glad I no longer work there.
+
+On this project I learned to use React much better, I learned typescript,
+I learned to use Redux, I learned to not like ASP all that much, I learned that
+I shouldn't have use GraphQL. Things are always clearer in retrospect.
+
+## DnD Character Sheet V2
+
+After I finished left this first professional job I created my second version of
+my DnD character sheet. This one had a big advantage that it actually worked. I
+used this for a long time.
+
+The biggest improvement between the first and second character sheet was that I
+used Redux for performance. However, it's still pretty ugly.
+
+## Second professional project
+
+This was at my second job. We used React Native. Initially we had a hybrid app
+that was part Kotlin, part Java, part Swift, part Objective C (this one was the
+worst), and part Typescript. I converted the app to eventually be mostly
+Typescript. To be honest converting the project to this new Typescript codebase
+was my biggest regret. It took too long, and had so many bugs and regressions.
+I guess I thought I was smarter then I was. Or that things would be easier then
+they were. I probably would have been better to just learn Object C.
+
+## DnD Quest Log V2
+
+I still use this project from time to time. The biggest thing I learned in this
+project was Monaco. Monaco is the name of the text editor in VS code, and I made
+it so that if you logged into the site as an admin you could actually edit the
+sites content. It was pretty neat.
+
+## Factory
+
+Factory was my first attempt at building a programming language. Factory was, if
+I'm being technical, a Domain Specific Language. It wouldn't be correct to call
+it a programming language because it's not turing complete.
+
+Factory was designed to solve logistics problems that you would run into when
+playing the game Satisfactory, mainly that it could solve recipe balances for
+complicated recipes.
+
+A simple program might have looked like this. It would print a tree listing
+every material needed to craft ReinforcedIronPlates.
+
+```
+print ReinforcedIronPlates(limit 60 IronOre)
+```
+
+or a more complex one might look like this. It's the same as before, but it will
+use the CastScrews alternate recipe, and start with IronIngots instead of
+IronOre.
+
+```
+recipe IPlates
+  out ReinforcedIronPlates
+  in IronIngots
+  alt CastScrews
+  limit 60 IronIngots
+
+print IPlates()
+```
+
+This language had a type system, and a language server with syntax highlighting,
+symbol resolution, documentation popups, and some primitive autocompletion.
+
+If I were designing this now I would have add delimiters to my grammar. But
+overall I think it was a success.
+
+I also would probably design this as a library for another language rather then
+a language itself, and maybe create a language to wrap that library.
+
+## DnD Quest Log V3
+
+I still pick at this project from time to time. It's much more complicated then
+the V2. It looks slicker, has a nicer interface with a side bar, has a search
+feature, and supports embedded components.
+
+The biggest problem with this was that I over engineered portions of it. For one
+thing, I wanted to build a universal React architecture I could use for future
+projects, but that was probably a fools errand. It was miserable to work on.
+
+I also tried to tack a mapping feature onto it, but that should have just been
+it's own application.
+
+On the positive side of things, I really got good at writing react code. Even
+though the universal architecture thing wasn't the best idea, it did force me to
+learn how to write better React components, services, and data structures. It's
+also the first time I used tailwind, prisma, tanstack query, tanstack router,
+and zod. Those have become some of my favorite libraries. They just play so well
+together and solve so many problems. I think what that taught me is to find
+solutions that solve specific problems well instead of solutions that try to do
+everything.
+
+## Sol
+
+Sol is a project that I will return to after I've had a little time away from it.
+It's a language designed for building developer consoles for Unity and Godot
+engine. My goal was to create a library that was super easy to integrate into
+your game that provided an experience comparable to working with a mature
+language with a full language server.
+
+This project wasn't a failure. The Sol runtime does work. It just got stalled out
+working on the UI side of things.
+
+## Sew
+
+Sew is a command line utility designed for string manipulation. The way I use it
+most often is to transform some string in my clipboard. You can see examples at
+[sewcli.com](https://sewcli.com). I would call this a project a success. I
+didn't bother with a type system for this project since it's designed to be used
+interactively, and I think that was a really smart choice.
+
+The language features syntax highlighting, and has a REPL that let's you see
+the output of your code in real time, while you write it.
+
+It features the following sub projects.
+
+- Sew Core: Runtime for the language.
+- Sew CLI: The CLI tool. It has two main features.
+  - I can process strings from piped input.
+  - It can run in an interactive REPL mode.
+- Sew JSI: WASM module for the Sew Runtime.
+- Sew Site: Source code for the sew website.
+
+## This blog
+
+Is this blog a failure? IDK? Maybe? Probably? Eventually? Time will tell. :p

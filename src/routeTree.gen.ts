@@ -12,8 +12,10 @@ import { Route as rootRouteImport } from './routes/__root.tsx'
 import { Route as IndexRouteImport } from './routes/index.tsx'
 import { Route as BlogThemesAndStylesIndexRouteImport } from './routes/blog/themesAndStyles/index.tsx'
 import { Route as BlogJeremyIndexRouteImport } from './routes/blog/jeremy/index.tsx'
+import { Route as BlogFailedProjectsIndexRouteImport } from './routes/blog/failedProjects/index.tsx'
 import { Route as BlogDoingCoolThingsWithMarkdown2IndexRouteImport } from './routes/blog/doingCoolThingsWithMarkdown2/index.tsx'
 import { Route as BlogDoingCoolThingsWithMarkdownIndexRouteImport } from './routes/blog/doingCoolThingsWithMarkdown/index.tsx'
+import { Route as BlogArchitectureIndexRouteImport } from './routes/blog/architecture/index.tsx'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -31,6 +33,11 @@ const BlogJeremyIndexRoute = BlogJeremyIndexRouteImport.update({
   path: '/blog/jeremy/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BlogFailedProjectsIndexRoute = BlogFailedProjectsIndexRouteImport.update({
+  id: '/blog/failedProjects/',
+  path: '/blog/failedProjects/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BlogDoingCoolThingsWithMarkdown2IndexRoute =
   BlogDoingCoolThingsWithMarkdown2IndexRouteImport.update({
     id: '/blog/doingCoolThingsWithMarkdown2/',
@@ -43,26 +50,37 @@ const BlogDoingCoolThingsWithMarkdownIndexRoute =
     path: '/blog/doingCoolThingsWithMarkdown/',
     getParentRoute: () => rootRouteImport,
   } as any)
+const BlogArchitectureIndexRoute = BlogArchitectureIndexRouteImport.update({
+  id: '/blog/architecture/',
+  path: '/blog/architecture/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/blog/architecture': typeof BlogArchitectureIndexRoute
   '/blog/doingCoolThingsWithMarkdown': typeof BlogDoingCoolThingsWithMarkdownIndexRoute
   '/blog/doingCoolThingsWithMarkdown2': typeof BlogDoingCoolThingsWithMarkdown2IndexRoute
+  '/blog/failedProjects': typeof BlogFailedProjectsIndexRoute
   '/blog/jeremy': typeof BlogJeremyIndexRoute
   '/blog/themesAndStyles': typeof BlogThemesAndStylesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/blog/architecture': typeof BlogArchitectureIndexRoute
   '/blog/doingCoolThingsWithMarkdown': typeof BlogDoingCoolThingsWithMarkdownIndexRoute
   '/blog/doingCoolThingsWithMarkdown2': typeof BlogDoingCoolThingsWithMarkdown2IndexRoute
+  '/blog/failedProjects': typeof BlogFailedProjectsIndexRoute
   '/blog/jeremy': typeof BlogJeremyIndexRoute
   '/blog/themesAndStyles': typeof BlogThemesAndStylesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/blog/architecture/': typeof BlogArchitectureIndexRoute
   '/blog/doingCoolThingsWithMarkdown/': typeof BlogDoingCoolThingsWithMarkdownIndexRoute
   '/blog/doingCoolThingsWithMarkdown2/': typeof BlogDoingCoolThingsWithMarkdown2IndexRoute
+  '/blog/failedProjects/': typeof BlogFailedProjectsIndexRoute
   '/blog/jeremy/': typeof BlogJeremyIndexRoute
   '/blog/themesAndStyles/': typeof BlogThemesAndStylesIndexRoute
 }
@@ -70,30 +88,38 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/blog/architecture'
     | '/blog/doingCoolThingsWithMarkdown'
     | '/blog/doingCoolThingsWithMarkdown2'
+    | '/blog/failedProjects'
     | '/blog/jeremy'
     | '/blog/themesAndStyles'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/blog/architecture'
     | '/blog/doingCoolThingsWithMarkdown'
     | '/blog/doingCoolThingsWithMarkdown2'
+    | '/blog/failedProjects'
     | '/blog/jeremy'
     | '/blog/themesAndStyles'
   id:
     | '__root__'
     | '/'
+    | '/blog/architecture/'
     | '/blog/doingCoolThingsWithMarkdown/'
     | '/blog/doingCoolThingsWithMarkdown2/'
+    | '/blog/failedProjects/'
     | '/blog/jeremy/'
     | '/blog/themesAndStyles/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  BlogArchitectureIndexRoute: typeof BlogArchitectureIndexRoute
   BlogDoingCoolThingsWithMarkdownIndexRoute: typeof BlogDoingCoolThingsWithMarkdownIndexRoute
   BlogDoingCoolThingsWithMarkdown2IndexRoute: typeof BlogDoingCoolThingsWithMarkdown2IndexRoute
+  BlogFailedProjectsIndexRoute: typeof BlogFailedProjectsIndexRoute
   BlogJeremyIndexRoute: typeof BlogJeremyIndexRoute
   BlogThemesAndStylesIndexRoute: typeof BlogThemesAndStylesIndexRoute
 }
@@ -121,6 +147,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogJeremyIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/blog/failedProjects/': {
+      id: '/blog/failedProjects/'
+      path: '/blog/failedProjects'
+      fullPath: '/blog/failedProjects'
+      preLoaderRoute: typeof BlogFailedProjectsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/blog/doingCoolThingsWithMarkdown2/': {
       id: '/blog/doingCoolThingsWithMarkdown2/'
       path: '/blog/doingCoolThingsWithMarkdown2'
@@ -135,15 +168,24 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogDoingCoolThingsWithMarkdownIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/blog/architecture/': {
+      id: '/blog/architecture/'
+      path: '/blog/architecture'
+      fullPath: '/blog/architecture'
+      preLoaderRoute: typeof BlogArchitectureIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  BlogArchitectureIndexRoute: BlogArchitectureIndexRoute,
   BlogDoingCoolThingsWithMarkdownIndexRoute:
     BlogDoingCoolThingsWithMarkdownIndexRoute,
   BlogDoingCoolThingsWithMarkdown2IndexRoute:
     BlogDoingCoolThingsWithMarkdown2IndexRoute,
+  BlogFailedProjectsIndexRoute: BlogFailedProjectsIndexRoute,
   BlogJeremyIndexRoute: BlogJeremyIndexRoute,
   BlogThemesAndStylesIndexRoute: BlogThemesAndStylesIndexRoute,
 }

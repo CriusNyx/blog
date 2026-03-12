@@ -7,7 +7,7 @@ html {
   --dark-blue: #003049;
   --light-blue: #669bbc;
   --primary: var(--dark-red);
-  --secondary: var(--dark-blue);
+  --secondary: var(--color-zinc-900);
   --tertiary: #669bbc;
   --accent: #fdf0d5;
   --error: #c1121f;
@@ -29,9 +29,14 @@ body {
   margin: 0;
   height: 100%;
   width: 100%;
-  background: linear-gradient(to bottom right, white, var(--dark-red)),
-    linear-gradient(to bottom left, white, var(--dark-blue)),
-    linear-gradient(black, white);
+  background:
+    linear-gradient(to bottom right, white, var(--color-emerald-700)),
+    linear-gradient(to bottom left, white, var(--color-cyan-600)),
+    linear-gradient(
+      var(--color-zinc-700),
+      var(--color-zinc-500),
+      var(--color-white)
+    );
   background-blend-mode: multiply;
 
   overflow: auto;
