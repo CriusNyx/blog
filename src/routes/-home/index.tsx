@@ -5,19 +5,19 @@ export function Home() {
     <div className="flex flex-col">
       <h1>Home</h1>
       <Link to="/blog/architecture">
-        <h4>Architecture</h4>
+        <h3>How I make React Apps</h3>
       </Link>
       <Link to="/blog/failedProjects">
-        <h4>Failed Projects</h4>
-      </Link>
-      <Link to="/blog/themesAndStyles/">
-        <h4>Themes and Styles</h4>
+        <h3>Projects that failed (And some that didn't)</h3>
       </Link>
       <Link to="/blog/doingCoolThingsWithMarkdown/">
-        <h4>Doing Cool Things (with Markdown)</h4>
+        <h3>Doing Cool Things (with Markdown)</h3>
       </Link>
       <Link to="/blog/doingCoolThingsWithMarkdown2/">
-        <h4>Doing Cool Things (with Markdown 2)</h4>
+        <h3>Doing Cool Things (with Markdown 2)</h3>
+      </Link>
+      <Link to="/blog/themesAndStyles/">
+        <h3>Themes and Styles</h3>
       </Link>
     </div>
   );

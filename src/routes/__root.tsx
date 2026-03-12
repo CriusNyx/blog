@@ -5,15 +5,12 @@ export const Route = createRootRoute({
   component: () => (
     <div className="flex flex-col h-full w-full">
       <div className="flex flex-row justify-center p2">
-        <div className="w-250 flex gap-2">
-          <Link to="/" className="[&.active]:font-bold">
-            Home
-          </Link>
-        </div>
+        <Link to="/" className="[&.active]:font-bold">
+          <h1 className="mb-0!">RJ's Blog</h1>
+        </Link>
       </div>
-      <hr />
       <div className="flex flex-col items-center grow">
-        <div className="flex flex-col w-250 max-w-[95vw] my-5 p-5 bg-[#00000050] grow rounded-xl">
+        <div className="flex flex-col w-250 max-w-[95vw] my-5 p-5 bg-black/50 grow rounded-xl">
           <Outlet />
         </div>
       </div>

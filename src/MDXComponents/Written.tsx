@@ -10,5 +10,5 @@ export function Written(props: WrittenProps) {
     () => Luxon.DateTime.fromFormat(props.date, "M/d/y").toLocaleString(),
     [props.date],
   );
-  return <span className="text-gray-500">Written: {dateString}</span>;
+  return <span className="text-gray-300">Written: {dateString}</span>;
 }
